@@ -57,7 +57,7 @@ function Index() {
         <div className="relative max-w-6xl mx-auto px-6 w-full">
           <p className="text-primary tracking-[0.3em] text-xs mb-4">DESDE 2021 · ESCADA - PE</p>
           <h1 className="font-display text-6xl md:text-8xl lg:text-9xl leading-none max-w-4xl">
-            Barbearia<br />Fabricio
+            Fabrício<br />Barber Shop
           </h1>
           <p className="mt-6 max-w-xl text-lg text-muted-foreground">
             Cortes clássicos, barba desenhada e um ritual masculino que vai muito além da estética.
