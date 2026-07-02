@@ -8,9 +8,9 @@ export const Route = createFileRoute("/")({
 });
 
 const services = [
-  { name: "Corte Clássico", price: "R$ 55", desc: "Máquina, tesoura e finalização com navalha." },
-  { name: "Barba Desenhada", price: "R$ 45", desc: "Toalha quente, óleo essencial e acabamento perfeito." },
-  { name: "Combo Fabricio", price: "R$ 90", desc: "Corte + barba com ritual completo de cuidados." },
+  { name: "Corte Degradê", price: "R$ 30", desc: "Máquina, tesoura e finalização com navalha." },
+  { name: "Barba", price: "R$ 25", desc: "Barba alinhada e acabamento perfeito." },
+  { name: "Combo", price: "R$ 45", desc: "Corte de cabelo + barba." },
   { name: "Pigmentação", price: "R$ 70", desc: "Preenchimento e disfarce natural." },
   { name: "Sobrancelha", price: "R$ 20", desc: "Design masculino sob medida." },
   { name: "Platinado", price: "R$ 180", desc: "Descoloração premium com hidratação." },
@@ -57,7 +57,7 @@ function Index() {
         <div className="relative max-w-6xl mx-auto px-6 w-full">
           <p className="text-primary tracking-[0.3em] text-xs mb-4">DESDE 2021 · ESCADA - PE</p>
           <h1 className="font-display text-6xl md:text-8xl lg:text-9xl leading-none max-w-4xl">
-            Fabrício<br />Barber Shop
+            Barbearia<br />Fabrício
           </h1>
           <p className="mt-6 max-w-xl text-lg text-muted-foreground">
             Cortes clássicos, barba desenhada e um ritual masculino que vai muito além da estética.
