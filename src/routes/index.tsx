@@ -23,13 +23,13 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const FALLBACK_SERVICES = [
-  { id: "1", name: "Corte Clássico", price: "55", desc: "Máquina, tesoura e finalização com navalha.", duration_minutes: 30 },
-  { id: "2", name: "Barba Desenhada", price: "45", desc: "Toalha quente, óleo essencial e acabamento perfeito.", duration_minutes: 30 },
-  { id: "3", name: "Combo Fabricio", price: "90", desc: "Corte + barba com ritual completo de cuidados.", duration_minutes: 60 },
-  { id: "4", name: "Pigmentação", price: "70", desc: "Preenchimento e disfarce natural.", duration_minutes: 45 },
-  { id: "5", name: "Sobrancelha", price: "20", desc: "Design masculino sob medida.", duration_minutes: 15 },
-  { id: "6", name: "Platinado", price: "180", desc: "Descoloração premium com hidratação.", duration_minutes: 120 },
+const services = [
+  { name: "Corte Degradê", price: "R$ 30", desc: "Máquina, tesoura e finalização com navalha." },
+  { name: "Barba", price: "R$ 25", desc: "Barba alinhada e acabamento perfeito." },
+  { name: "Combo", price: "R$ 45", desc: "Corte de cabelo + barba." },
+  { name: "Pigmentação", price: "R$ 70", desc: "Preenchimento e disfarce natural." },
+  { name: "Sobrancelha", price: "R$ 20", desc: "Design masculino sob medida." },
+  { name: "Platinado", price: "R$ 180", desc: "Descoloração premium com hidratação." },
 ];
 
 const testimonials = [
@@ -55,7 +55,7 @@ function BookingModal({ children }: { children: React.ReactNode }) {
   const [clientName, setClientName] = useState("");
   const [clientPhone, setClientPhone] = useState("");
   const [bookedSlots, setBookedSlots] = useState<string[]>([]);
-  
+
   const [isLoadingServices, setIsLoadingServices] = useState(false);
   const [isLoadingSlots, setIsLoadingSlots] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -65,7 +65,7 @@ function BookingModal({ children }: { children: React.ReactNode }) {
   // Carregar serviços ativos do Supabase
   useEffect(() => {
     if (!isOpen) return;
-    
+
     const fetchServices = async () => {
       setIsLoadingServices(true);
       try {
@@ -193,7 +193,7 @@ function BookingModal({ children }: { children: React.ReactNode }) {
 
       const encodedMessage = encodeURIComponent(message);
       // Número padrão de atendimento
-      const whatsappNumber = "5511999999999"; 
+      const whatsappNumber = "5511999999999";
       setWhatsappLink(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`);
 
     } catch (err: any) {
@@ -293,11 +293,10 @@ function BookingModal({ children }: { children: React.ReactNode }) {
                   <button
                     key={s.id}
                     onClick={() => setSelectedServiceId(s.id)}
-                    className={`w-full text-left p-4 rounded-sm border transition flex justify-between items-center group cursor-pointer ${
-                      selectedServiceId === s.id
+                    className={`w-full text-left p-4 rounded-sm border transition flex justify-between items-center group cursor-pointer ${selectedServiceId === s.id
                         ? "bg-secondary border-primary"
                         : "bg-background/50 border-border hover:bg-secondary/40"
-                    }`}
+                      }`}
                   >
                     <div>
                       <h4 className="font-semibold group-hover:text-primary transition">{s.name}</h4>
@@ -355,11 +354,10 @@ function BookingModal({ children }: { children: React.ReactNode }) {
                         <button
                           key={slot}
                           onClick={() => setSelectedTime(slot)}
-                          className={`p-2 text-xs font-semibold rounded-sm border transition text-center cursor-pointer ${
-                            selectedTime === slot
+                          className={`p-2 text-xs font-semibold rounded-sm border transition text-center cursor-pointer ${selectedTime === slot
                               ? "bg-primary text-primary-foreground border-primary"
                               : "bg-background/60 border-border hover:bg-secondary"
-                          }`}
+                            }`}
                         >
                           {slot}
                         </button>
@@ -507,7 +505,7 @@ function Index() {
         <div className="relative max-w-6xl mx-auto px-6 w-full">
           <p className="text-primary tracking-[0.3em] text-xs mb-4">DESDE 2021 · ESCADA - PE</p>
           <h1 className="font-display text-6xl md:text-8xl lg:text-9xl leading-none max-w-4xl">
-            Fabrício<br />Barber Shop
+            Barbearia<br />Fabrício
           </h1>
           <p className="mt-6 max-w-xl text-lg text-muted-foreground">
             Cortes clássicos, barba desenhada e um ritual masculino que vai muito além da estética.
@@ -636,14 +634,14 @@ function Index() {
               <MapPin className="w-5 h-5 text-primary shrink-0 mt-1" />
               <div>
                 <p className="font-semibold mb-1">Endereço</p>
-                <p className="text-sm text-muted-foreground">Rua das Tesouras, 123<br />Vila Madalena, São Paulo</p>
+                <p className="text-sm text-muted-foreground">Av. José Mário Leite<br />(Ao lado do Sesi)</p>
               </div>
             </div>
             <div className="flex gap-4">
               <Clock className="w-5 h-5 text-primary shrink-0 mt-1" />
               <div>
                 <p className="font-semibold mb-1">Horário</p>
-                <p className="text-sm text-muted-foreground">Ter–Sáb: 9h às 20h<br />Dom–Seg: fechado</p>
+                <p className="text-sm text-muted-foreground">Seg–Sáb: 9h às 20h<br />Dom: fechado</p>
               </div>
             </div>
             <div className="flex gap-4">
