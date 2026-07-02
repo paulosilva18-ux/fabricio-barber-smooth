@@ -55,7 +55,7 @@ function Index() {
         />
         <div className="absolute inset-0" style={{ background: "var(--gradient-hero)" }} />
         <div className="relative max-w-6xl mx-auto px-6 w-full">
-          <p className="text-primary tracking-[0.3em] text-xs mb-4">DESDE 2015 · SÃO PAULO</p>
+          <p className="text-primary tracking-[0.3em] text-xs mb-4">DESDE 2023 · ESCADA - PE</p>
           <h1 className="font-display text-6xl md:text-8xl lg:text-9xl leading-none max-w-4xl">
             Barbearia<br />Fabricio
           </h1>
