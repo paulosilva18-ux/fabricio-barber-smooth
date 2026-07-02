@@ -186,14 +186,14 @@ function Index() {
               <MapPin className="w-5 h-5 text-primary shrink-0 mt-1" />
               <div>
                 <p className="font-semibold mb-1">Endereço</p>
-                <p className="text-sm text-muted-foreground">Rua das Tesouras, 123<br />Vila Madalena, São Paulo</p>
+                <p className="text-sm text-muted-foreground">Av. José Mário Leite<br />(Ao lado do Sesi)</p>
               </div>
             </div>
             <div className="flex gap-4">
               <Clock className="w-5 h-5 text-primary shrink-0 mt-1" />
               <div>
                 <p className="font-semibold mb-1">Horário</p>
-                <p className="text-sm text-muted-foreground">Ter–Sáb: 9h às 20h<br />Dom–Seg: fechado</p>
+                <p className="text-sm text-muted-foreground">Seg–Sáb: 9h às 20h<br />Dom: fechado</p>
               </div>
             </div>
             <div className="flex gap-4">
