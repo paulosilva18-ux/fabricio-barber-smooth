@@ -25,11 +25,11 @@ export const Route = createFileRoute("/")({
 
 const FALLBACK_SERVICES = [
   { id: "1", name: "Corte Degradê", price: "30", desc: "Máquina, tesoura e finalização com navalha.", duration_minutes: 30 },
-  { id: "2", name: "Barba", price: "25", desc: "Barba alinhada e acabamento perfeito.", duration_minutes: 30 },
-  { id: "3", name: "Combo", price: "45", desc: "Corte de cabelo + barba.", duration_minutes: 60 },
-  { id: "4", name: "Pigmentação", price: "70", desc: "Preenchimento e disfarce natural.", duration_minutes: 45 },
-  { id: "5", name: "Sobrancelha", price: "20", desc: "Design masculino sob medida.", duration_minutes: 15 },
-  { id: "6", name: "Platinado", price: "180", desc: "Descoloração premium com hidratação.", duration_minutes: 120 },
+  { id: "2", name: "Barba", price: "20", desc: "Barba alinhada e acabamento perfeito.", duration_minutes: 30 },
+  { id: "3", name: "Combo", price: "40", desc: "Corte de cabelo + barba.", duration_minutes: 60 },
+  { id: "4", name: "Pigmentação", price: "60", desc: "Preenchimento e disfarce natural.", duration_minutes: 45 },
+  { id: "5", name: "Toalha Quente", price: "03", desc: "Ritual relaxante com toalha quente.", duration_minutes: 15 },
+  { id: "6", name: "Alisamento", price: "50", desc: "Alisamento capilar com acabamento premium.", duration_minutes: 90 },
 ];
 
 const testimonials = [
