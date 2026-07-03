@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Scissors, MapPin, Phone, Clock, Instagram, Star, CalendarDays, CheckCircle2, Loader2 } from "lucide-react";
 import heroImg from "@/assets/hero-barbershop.jpg";
 import barberImg from "@/assets/barber-fabricio.jpg";
@@ -483,6 +483,7 @@ function Index() {
             <a href="#sobre" className="hover:text-foreground transition">Sobre</a>
             <a href="#depoimentos" className="hover:text-foreground transition">Depoimentos</a>
             <a href="#contato" className="hover:text-foreground transition">Contato</a>
+            <Link to="/admin" className="hover:text-foreground transition text-primary font-semibold">Admin</Link>
           </div>
           <BookingModal>
             <Button size="sm" className="rounded-sm font-semibold cursor-pointer">
@@ -662,9 +663,14 @@ function Index() {
             <Scissors className="w-4 h-4 text-primary" /> FABRICIO
           </p>
           <p className="text-xs text-muted-foreground">© 2026 Barbearia Fabricio. Todos os direitos reservados.</p>
-          <a href="#" className="text-muted-foreground hover:text-primary transition">
-            <Instagram className="w-5 h-5" />
-          </a>
+          <div className="flex items-center gap-4">
+            <Link to="/admin" className="text-xs text-muted-foreground hover:text-primary transition underline decoration-dotted">
+              Painel Admin
+            </Link>
+            <a href="#" className="text-muted-foreground hover:text-primary transition">
+              <Instagram className="w-5 h-5" />
+            </a>
+          </div>
         </div>
       </footer>
     </div>
