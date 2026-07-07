@@ -17,7 +17,8 @@ import {
   ChevronLeft,
   Loader2,
   Sliders,
-  DollarSign as PriceIcon
+  DollarSign as PriceIcon,
+  Lock
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -69,6 +70,8 @@ const STATIC_SERVICES_FALLBACK = [
 ];
 
 function Admin() {
+  const [password, setPassword] = useState("");
+  const [isAuthorized, setIsAuthorized] = useState(false);
   const [activeTab, setActiveTab] = useState<"bookings" | "services">("bookings");
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [services, setServices] = useState<Service[]>([]);
@@ -105,7 +108,6 @@ function Admin() {
     } catch (err) {
       console.warn("Erro ao carregar agendamentos (Supabase offline/sem tabelas):", err);
       setIsSupabaseOffline(true);
-      // Simulação offline de agendamento se necessário
     } finally {
       setIsLoadingBookings(false);
     }
@@ -132,10 +134,28 @@ function Admin() {
   };
 
   useEffect(() => {
+    if (sessionStorage.getItem("admin_authorized") === "true") {
+      setIsAuthorized(true);
+    }
+  }, []);
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password === "fabricio2026") {
+      sessionStorage.setItem("admin_authorized", "true");
+      setIsAuthorized(true);
+      toast.success("Acesso autorizado!");
+    } else {
+      toast.error("Senha incorreta. Tente novamente.");
+    }
+  };
+
+  useEffect(() => {
+    if (!isAuthorized) return;
+
     fetchBookings();
     fetchServices();
 
-    // Habilitar tempo real (realtime) para escutar inserções e alterações nos agendamentos
     const channel = supabase
       .channel("admin-bookings-channel")
       .on(
@@ -154,10 +174,16 @@ function Admin() {
       )
       .subscribe();
 
+    const interval = setInterval(() => {
+      fetchBookings();
+      fetchServices();
+    }, 5000);
+
     return () => {
       supabase.removeChannel(channel);
+      clearInterval(interval);
     };
-  }, []);
+  }, [isAuthorized]);
 
   const handleUpdateStatus = async (bookingId: string, newStatus: "confirmed" | "cancelled") => {
     try {
@@ -237,6 +263,53 @@ function Admin() {
     .filter((b) => b.status === "confirmed")
     .reduce((acc, curr) => acc + (curr.services?.price || 0), 0);
 
+  const clientesUnicos = new Set(bookings.map((b) => b.client_phone.replace(/\D/g, ""))).size;
+
+  if (!isAuthorized) {
+    return (
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center p-6">
+        <Card className="w-full max-w-md bg-card border-border shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-primary/50 via-primary to-primary/50" />
+          <CardHeader className="text-center pb-4">
+            <div className="mx-auto w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+              <Lock className="w-6 h-6 text-primary" />
+            </div>
+            <CardTitle className="font-display text-3xl tracking-wider">Acesso Restrito</CardTitle>
+            <CardDescription className="text-xs text-muted-foreground mt-1">
+              Painel Administrativo Barbearia Fabrício
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div className="space-y-2">
+                <label htmlFor="passcode" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  Senha de Acesso
+                </label>
+                <input
+                  id="passcode"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Digite a senha administrativa..."
+                  className="w-full bg-background border border-border rounded-sm py-3 px-4 text-sm focus:outline-none focus:border-primary transition"
+                  autoFocus
+                />
+              </div>
+              <Button type="submit" className="w-full font-semibold rounded-sm tracking-wide mt-2">
+                Entrar no Painel
+              </Button>
+            </form>
+            <div className="text-center mt-6">
+              <Link to="/" className="text-xs text-muted-foreground hover:text-primary transition underline">
+                Voltar para o site oficial
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background text-foreground p-6 md:p-12">
       <div className="max-w-6xl mx-auto space-y-8">
@@ -247,10 +320,16 @@ function Admin() {
             <Link to="/" className="text-sm text-primary hover:underline flex items-center gap-1">
               <ChevronLeft className="w-4 h-4" /> Voltar para o Site
             </Link>
-            <h1 className="font-display text-4xl tracking-wider flex items-center gap-2 mt-2">
-              <Scissors className="w-6 h-6 text-primary animate-pulse" />
-              PAINEL ADMIN · FABRÍCIO
-            </h1>
+            <div className="flex items-center gap-3 flex-wrap mt-2">
+              <h1 className="font-display text-4xl tracking-wider flex items-center gap-2">
+                <Scissors className="w-6 h-6 text-primary" />
+                PAINEL ADMIN · FABRÍCIO
+              </h1>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+                Sincronizado
+              </span>
+            </div>
             <p className="text-xs text-muted-foreground">Gerencie reservas e serviços em tempo real</p>
           </div>
           <div className="flex items-center gap-3">
@@ -289,19 +368,19 @@ function Admin() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <Card className="bg-card border-border">
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-xs font-medium text-muted-foreground uppercase">Total de Agendados</CardTitle>
-              <Calendar className="w-4 h-4 text-primary" />
+              <CardTitle className="text-xs font-medium text-muted-foreground uppercase">Clientes (Únicos)</CardTitle>
+              <Users className="w-4 h-4 text-primary" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{totalAgendamentos}</div>
-              <p className="text-xs text-muted-foreground">Agendamentos totais</p>
+              <div className="text-2xl font-bold">{clientesUnicos}</div>
+              <p className="text-xs text-muted-foreground">{totalAgendamentos} agendamentos totais</p>
             </CardContent>
           </Card>
 
           <Card className="bg-card border-border">
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-xs font-medium text-muted-foreground uppercase">Pendentes</CardTitle>
-              <Users className="w-4 h-4 text-amber-500" />
+              <CardTitle className="text-xs font-medium text-muted-foreground uppercase">Cortes Pendentes</CardTitle>
+              <Calendar className="w-4 h-4 text-amber-500" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-amber-500">{pendentes}</div>
@@ -311,23 +390,23 @@ function Admin() {
 
           <Card className="bg-card border-border">
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-xs font-medium text-muted-foreground uppercase">Confirmados</CardTitle>
+              <CardTitle className="text-xs font-medium text-muted-foreground uppercase">Cortes Realizados</CardTitle>
               <CheckCircle className="w-4 h-4 text-emerald-500" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-emerald-500">{confirmados}</div>
-              <p className="text-xs text-muted-foreground">Clientes agendados</p>
+              <p className="text-xs text-muted-foreground">Atendimentos finalizados</p>
             </CardContent>
           </Card>
 
           <Card className="bg-card border-border">
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-xs font-medium text-muted-foreground uppercase">Faturamento (Confirmados)</CardTitle>
-              <DollarSign className="w-4 h-4 text-primary" />
+              <CardTitle className="text-xs font-medium text-muted-foreground uppercase">Faturamento</CardTitle>
+              <DollarSign className="w-4 h-4 text-emerald-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-primary">R$ {faturamentoEstimado}</div>
-              <p className="text-xs text-muted-foreground">Garantidos no caixa</p>
+              <div className="text-2xl font-bold text-emerald-400">R$ {faturamentoEstimado}</div>
+              <p className="text-xs text-muted-foreground">Valor dos cortes finalizados</p>
             </CardContent>
           </Card>
         </div>
